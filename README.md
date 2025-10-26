@@ -59,6 +59,12 @@ python manage.py createsuperuser
 python manage.py migrate
 ```
 
+### 6. Sair do container
+
+```bash
+exit
+```
+
 
 
 ## Autenticação JWT
@@ -98,6 +104,16 @@ A task cria os registros no banco de dados em background.
 
 Executada diariamente via **Celery Beat**, conforme agendamento definido, onde todas as peças com quantidade < 10 são ajustadas para o mínimo de 10.
 
+Para testar manualmente essa funcionalidade:
+
+```bash
+docker compose exec web bash
+python manage.py shell
+from apps.products.tasks import replenish_stock_minimum
+replenish_stock_minimum.delay()
+exit()
+exit
+```
 
 ## Testes automatizados
 

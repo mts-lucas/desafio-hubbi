@@ -66,8 +66,8 @@ python manage.py migrate
 Endpoints:
 
 ```
-POST /api/v1/token/              # gera access e refresh tokens
-POST /api/v1/token/refresh/      # renova token de acesso
+POST marketplace/api/v1/v1/token/              # gera access e refresh tokens
+POST marketplace/api/v1/token/refresh/         # renova token de acesso
 ```
 
 Exemplo:
@@ -79,19 +79,19 @@ curl -X POST http://localhost:8000/api/token/ -d 'username=admin&password=senha'
 
 ##  Endpoints principais
 
-* `GET /api/v1/parts/` — listar peças (autenticado)
-* `GET /api/v1/parts/<id>/` — detalhes de uma peça
-* `POST /api/v1/parts/` — criar peça (**apenas admin**)
-* `PUT/PATCH /api/v1/parts/<id>/` — atualizar (**apenas admin**)
-* `DELETE /api/v1/parts/<id>/` — excluir (**apenas admin**)
-* `POST /api/v1/parts/import-csv/` — upload CSV (**apenas admin**, executado de forma assíncrona)
+* `GET marketplace/api/v1/parts/` — listar peças (autenticado)
+* `GET marketplace/api/v1/parts/<id>/` — detalhes de uma peça
+* `POST marketplace/api/v1/parts/` — criar peça (**apenas admin**)
+* `PUT/PATCH marketplace/api/v1/parts/<id>/` — atualizar (**apenas admin**)
+* `DELETE marketplace/api/v1/parts/<id>/` — excluir (**apenas admin**)
+* `POST marketplace/api/v1/parts/import-csv/` — upload CSV (**apenas admin**, executado de forma assíncrona)
 
 
 ##  Tarefas Celery
 
 ### 1. Importação CSV (assíncrona)
 
-Executada ao enviar o arquivo via endpoint `/api/parts/import-csv/`.
+Executada ao enviar o arquivo via endpoint `marketplace/api/v1/parts/import-csv/`.
 A task cria os registros no banco de dados em background.
 
 ### 2. Reposição automática de estoque

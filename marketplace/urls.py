@@ -23,8 +23,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
     path('marketplace/admin/', admin.site.urls),
-    path('marketplace/api/v1//token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('marketplace/api/v1//token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('marketplace/api/v1/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('marketplace/api/v1/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('marketplace/api/v1/', include('apps.products.urls')),
     path('marketplace/', RedirectView.as_view(url='api/v1/')),
     path('marketplace/api/', RedirectView.as_view(url='v1/')),

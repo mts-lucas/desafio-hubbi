@@ -7,8 +7,9 @@ from rest_framework.views import APIView
 
 from .models import Part
 from .permissions import IsAdminOrReadOnly
-from .serializers import PartDetailSerializer, PartListSerializer
+from .serializers import PartDetailSerializer, PartListSerializer, PartImportSerializer
 from .tasks import import_parts_from_csv
+from drf_spectacular.utils import extend_schema, OpenApiResponse
 
 
 class PartListView(ListCreateAPIView):
@@ -37,15 +38,20 @@ class PartImportView(APIView):
     permission_classes = [IsAdminOrReadOnly,]
     parser_classes = [MultiPartParser]
 
-    def post(self, request, *args, **kwargs):
-        file = request.FILES.get('file')
-        if not file:
-            return Response(
-                {"detail": "file required"},
-                status=status.HTTP_400_BAD_REQUEST
-            )
 
-        csv_content = file.read().decode("utf-8")
+    @extend_schema(
+        request=PartImportSerializer,
+        responses={
+            202: OpenApiResponse(description="Importação agendada com sucesso."),
+            400: OpenApiResponse(description="Erro de validação do arquivo."),
+        },
+    )
+    def post(self, request, *args, **kwargs):
+        serializer = PartImportSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        csv_file = serializer.validated_data["file"]
+        csv_content = csv_file.read().decode("utf-8")
         import_parts_from_csv.delay(csv_content)
 
         return Response(

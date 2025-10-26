@@ -1,10 +1,13 @@
 #!/bin/sh
 
-echo "Aguardando o banco de dados ficar disponível..."
+
+echo "Waiting for postgres..."
 
 while ! nc -z $POSTGRES_HOST $POSTGRES_PORT; do
-  sleep 1
+  sleep 0.1
 done
 
-echo "Banco disponível, iniciando aplicação..."
+echo "PostgreSQL started"
+
 exec "$@"
+

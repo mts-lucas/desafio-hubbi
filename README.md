@@ -89,6 +89,7 @@ Dentro da interface do Swagger, no inicio da pagina, deve se inserir o access to
 * `DELETE marketplace/api/v1/parts/<id>/` — excluir (**apenas admin**)
 * `POST marketplace/api/v1/parts/import-csv/` — upload CSV (**apenas admin**, executado de forma assíncrona)
 
+para testar o endpoint de importação de csv, utilize a planilha que está em `docs/planilha.csv`
 
 ##  Tarefas Celery
 

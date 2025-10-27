@@ -16,6 +16,8 @@ desafio-hubbi/
 │   ├── settings.py
 │   ├── celery.py
 │   └── urls.py
+├── docs/                      
+│   ├── planilha.csv           # Planilha para ser usada nos testes
 ├── docker-compose.yml
 ├── Dockerfile
 ├── .env.example
@@ -39,7 +41,7 @@ cp .env.example .env
 docker compose up --build
 ```
 
-> O serviço `web` será exposto em [http://localhost:8000](http://localhost:8000)
+> O serviço `web` será exposto em [http://localhost:8000](http://localhost:8000) onde sera redirecionado para a interface do swagger onde podera testar os demais endpoints
 
 ### 3. Acessar o container Django
 
@@ -59,12 +61,6 @@ python manage.py createsuperuser
 python manage.py migrate
 ```
 
-### 6. Sair do container
-
-```bash
-exit
-```
-
 
 
 ## Autenticação JWT
@@ -79,9 +75,10 @@ POST marketplace/api/v1/token/refresh/         # renova token de acesso
 Exemplo:
 
 ```bash
-curl -X POST http://localhost:8000/api/token/ -d 'username=admin&password=senha'
+curl -X POST http://localhost:8000/marketplace/api/v1/v1/token/ -d 'username=admin&password=senha'
 ```
 
+Dentro da interface do Swagger, no inicio da pagina, deve se inserir o access token recebido para poder acessar os demais endpoints que são privados
 
 ##  Endpoints principais
 

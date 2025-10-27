@@ -7,9 +7,9 @@ from .views import *
 
 urlpatterns = [
     path('', RedirectView.as_view(url='schema/swagger/')),
-    path('parts/', PartListView.as_view(), name='part_list'),
-    path('parts/<int:pk>/', PartDetailView.as_view(), name='part_detail'),
-    path('parts/import-csv/', PartImportView.as_view(), name='part-import-csv'),
+    path('parts/', PartListView.as_view(), name='part-list'),
+    path('parts/<int:pk>/', PartDetailView.as_view(), name='part-detail'),
+    path('parts/import-csv/', PartImportView.as_view(), name='part-import'),
 ]
 
 #  Swagger e Redoc

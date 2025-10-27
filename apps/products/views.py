@@ -1,15 +1,17 @@
+from drf_spectacular.utils import OpenApiResponse, extend_schema
 from rest_framework import status
 from rest_framework.generics import (ListCreateAPIView,
                                      RetrieveUpdateDestroyAPIView)
 from rest_framework.parsers import MultiPartParser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import Part
 from .permissions import IsAdminOrReadOnly
-from .serializers import PartDetailSerializer, PartListSerializer, PartImportSerializer
+from .serializers import (PartDetailSerializer, PartImportSerializer,
+                          PartListSerializer)
 from .tasks import import_parts_from_csv
-from drf_spectacular.utils import extend_schema, OpenApiResponse
 
 
 class PartListView(ListCreateAPIView):
@@ -17,7 +19,7 @@ class PartListView(ListCreateAPIView):
     Permite Listar e Cadastrar Peças.
     """
     queryset = Part.objects.all()
-    permission_classes = [IsAdminOrReadOnly,]
+    permission_classes = [IsAdminOrReadOnly, IsAuthenticated]
     serializer_class = PartListSerializer
 
 
@@ -26,7 +28,7 @@ class PartDetailView(RetrieveUpdateDestroyAPIView):
     Permite Visualizar, Editar e Remover Peças.
     """
     queryset = Part.objects.all()
-    permission_classes = [IsAdminOrReadOnly,]
+    permission_classes = [IsAdminOrReadOnly, IsAuthenticated]
     serializer_class = PartDetailSerializer
 
 
@@ -34,8 +36,10 @@ class PartImportView(APIView):
     """
     Endpoint para que usuários admin possam fazer upload de planilha
     para popular peças.
+
+    O CSV deve conter as seguintes colunas com cabecalho: nome, descricao, preco, quantidade
     """
-    permission_classes = [IsAdminOrReadOnly,]
+    permission_classes = [IsAdminOrReadOnly, IsAuthenticated]
     parser_classes = [MultiPartParser]
 
 

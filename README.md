@@ -38,7 +38,7 @@ cp .env.example .env
 ### 2. Construir e subir os containers
 
 ```bash
-docker compose up --build
+docker compose up --build -d
 ```
 
 > O serviço `web` será exposto em [http://localhost:8000](http://localhost:8000) onde sera redirecionado para a interface do swagger onde podera testar os demais endpoints

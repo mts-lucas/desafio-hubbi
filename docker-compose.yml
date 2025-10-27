@@ -1,0 +1,60 @@
+services:
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_NAME}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    container_name: redis_broker
+    restart: always
+    ports:
+      - "6379:6379"
+
+  web:
+    build: .
+    container_name: django_app
+    command: sh -c "python manage.py migrate --noinput && gunicorn marketplace.wsgi:application --bind 0.0.0.0:8000"
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
+
+  worker:
+    build: .
+    container_name: celery_worker
+    command: celery -A marketplace worker --loglevel=info
+    volumes:
+      - .:/code
+    env_file:
+      - .env
+    depends_on:
+      - web
+      - redis
+
+  beat:
+    build: .
+    container_name: celery_beat
+    command: celery -A marketplace beat --loglevel=info
+    volumes:
+      - .:/code
+    env_file:
+      - .env
+    depends_on:
+      - worker
+
+volumes:
+  postgres_data:

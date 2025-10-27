@@ -11,7 +11,7 @@ desafio-hubbi/
 │       ├── models.py          # Modelo Part
 │       ├── views.py           # CRUD + importação CSV
 │       ├── tasks.py           # Tarefas Celery (importação e reposição)
-│       └── tests/             
+│       └── tests.py           # Tests das views e das tasks
 ├── marketplace/               # Configurações Django
 │   ├── settings.py
 │   ├── celery.py
@@ -86,7 +86,7 @@ curl -X POST http://localhost:8000/api/token/ -d 'username=admin&password=senha'
 ##  Endpoints principais
 
 * `GET marketplace/api/v1/parts/` — listar peças (autenticado)
-* `GET marketplace/api/v1/parts/<id>/` — detalhes de uma peça
+* `GET marketplace/api/v1/parts/<id>/` — detalhes de uma peça (autenticado)
 * `POST marketplace/api/v1/parts/` — criar peça (**apenas admin**)
 * `PUT/PATCH marketplace/api/v1/parts/<id>/` — atualizar (**apenas admin**)
 * `DELETE marketplace/api/v1/parts/<id>/` — excluir (**apenas admin**)
@@ -109,10 +109,13 @@ Para testar manualmente essa funcionalidade:
 ```bash
 docker compose exec web bash
 python manage.py shell
+```
+
+Dentro do Django Shell execute:
+
+```bash
 from apps.products.tasks import replenish_stock_minimum
 replenish_stock_minimum.delay()
-exit()
-exit
 ```
 
 ## Testes automatizados
@@ -120,11 +123,5 @@ exit
 Para rodar os testes:
 
 ```bash
-docker compose exec web pytest -v
-```
-
-Relatório de cobertura:
-
-```bash
-docker compose exec web pytest --cov=apps/products
+docker compose exec web python manage.py test
 ```
